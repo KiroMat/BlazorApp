@@ -1,3 +1,10 @@
+using Data.Db;
+using DataApi.Shared;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +12,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setup => 
+{
+    setup.EnableAnnotations();
+});
+
+builder.Services.AddValitators();
+
+builder.Services.AddDbContextFactory<DataContext>(options =>
+{
+    options.UseInMemoryDatabase("DbTest");
+});
 
 builder.Services.AddCors(options =>
 {
@@ -15,13 +32,18 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options => 
+    {
+        //options.RoutePrefix = string.Empty;  // swagger as root
+    });
 }
 
 app.UseHttpsRedirection();
