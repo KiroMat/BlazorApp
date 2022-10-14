@@ -1,9 +1,14 @@
 ﻿using Data.Db;
 using DataApi.Shared.Models;
+using DataApi.Shared.Responses;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,8 +21,11 @@ namespace DataApi.Controllers
         private readonly DataContext _context;
         private readonly IValidator<User> _validator;
 
+        private const string securityKey = "BE462382102B9116FF2E5B368E4F7E1C";
+
         public UserController(DataContext context, IValidator<User> validator)
         {
+            context.Database.EnsureCreated();
             _context = context;
             _validator = validator;
         }
@@ -104,6 +112,35 @@ namespace DataApi.Controllers
             }
 
             return NoContent();
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] User user)
+        {
+            var userDb = await _context.Users.FirstOrDefaultAsync(x => x.Login == user.Login);
+            if (userDb is null)
+                return BadRequest();
+            if(userDb.Password != user.Password)
+                return BadRequest();
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()),
+                new Claim(ClaimTypes.GivenName, userDb.Login)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+            var token = new JwtSecurityToken(
+                issuer: "http://localhost:3000",
+                audience: "http://localhost:3000",
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(30),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+            var tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new TokenResponse { Token = tokenAsString });
         }
     }
 }

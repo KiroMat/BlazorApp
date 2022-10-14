@@ -1,0 +1,25 @@
+﻿@namespace WebAssemblyApp.Components
+
+<EditForm Model="_model" OnValidSubmit="LoginUserAsync">
+    <DataAnnotationsValidator />
+
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">Welcom to test APP</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTextField Label="Login" HelperText="Required" Placeholder="xxxxx@xxx.xx" @bind-Value="@_model.Login" />
+            <MudTextField Label="Password" HelperText="Required" InputType="InputType.Password" @bind-Value="@_model.Password" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Login</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Class="ml-2">Create Account</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+
+}

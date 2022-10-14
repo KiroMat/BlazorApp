@@ -1,4 +1,4 @@
-namespace DataApi
+﻿namespace DataApi.Shared.Models
 {
     public class WeatherForecast
     {

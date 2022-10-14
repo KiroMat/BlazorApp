@@ -1,3 +1,4 @@
+using DataApi.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DataApi.Controllers

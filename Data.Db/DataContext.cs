@@ -12,6 +12,11 @@ namespace Data.Db
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = 101, Login = "tom", Password = "123"},
+                new User { Id = 102, Login = "ewa", Password = "111"}
+                );
         }
     }
 }
