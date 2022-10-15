@@ -14,12 +14,8 @@
             <MudTextField Label="Password" HelperText="Required" InputType="InputType.Password" @bind-Value="@_model.Password" />
         </MudCardContent>
         <MudCardActions>
-            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Login</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginUserAsync">Login</MudButton>
             <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Class="ml-2">Create Account</MudButton>
         </MudCardActions>
     </MudCard>
 </EditForm>
-
-@code {
-
-}

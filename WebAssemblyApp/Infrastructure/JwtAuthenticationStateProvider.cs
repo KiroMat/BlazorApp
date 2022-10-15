@@ -8,7 +8,6 @@ namespace WebAssemblyApp.Infrastructure
     public class JwtAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly ILocalStorageService _storage;
-        private const string AccessTokenKey = "acces_token";
 
         public JwtAuthenticationStateProvider(ILocalStorageService localStorageService)
         {
@@ -17,9 +16,9 @@ namespace WebAssemblyApp.Infrastructure
 
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            if(await _storage.ContainKeyAsync(AccessTokenKey))
+            if(await _storage.ContainKeyAsync(LocalStorageKeys.AccesToken))
             {
-                var tokenAsString = await _storage.GetItemAsStringAsync(AccessTokenKey);
+                var tokenAsString = await _storage.GetItemAsStringAsync(LocalStorageKeys.AccesToken);
                 var tokenHandler = new JwtSecurityTokenHandler();
 
                 var token = tokenHandler.ReadJwtToken(tokenAsString);
