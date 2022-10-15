@@ -25,7 +25,6 @@ namespace DataApi.Controllers
 
         public UserController(DataContext context, IValidator<User> validator)
         {
-            context.Database.EnsureCreated();
             _context = context;
             _validator = validator;
         }
@@ -128,7 +127,8 @@ namespace DataApi.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString()),
-                new Claim(ClaimTypes.GivenName, userDb.Login)
+                new Claim(ClaimTypes.GivenName, userDb.Login),
+                new Claim(ClaimTypes.NameIdentifier, userDb.Id.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));

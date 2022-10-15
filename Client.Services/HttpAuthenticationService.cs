@@ -22,8 +22,7 @@ namespace Client.Services
             if(!response.IsSuccessStatusCode)
             {
                 var errorResponse = await response.Content.ReadFromJsonAsync<ErrorApiResponse>();
-                throw new ApiExeption(errorResponse, (HttpStatusCode)Enum.Parse(typeof(HttpStatusCode), errorResponse.Status.ToString()));
-            }
+                throw new ApiExeption(errorResponse, (HttpStatusCode)errorResponse.Status);
         }
     }
 }
