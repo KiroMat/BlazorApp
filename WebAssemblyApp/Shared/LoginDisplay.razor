@@ -3,6 +3,7 @@
 @inject NavigationManager Navigation
 
 @using System.Security.Claims
+@using WebAssemblyApp.Infrastructure
 
 <AuthorizeView>
     <Authorized>
@@ -20,7 +21,7 @@
 
     private async Task LogOutAsync()
     {
-        await Storage.RemoveItemAsync("access_token");
+        await Storage.RemoveItemAsync(LocalStorageKeys.AccesToken);
 
         await AuthenticationStateProvider.GetAuthenticationStateAsync();
         Navigation.NavigateTo("/authentication/login");

@@ -1,7 +1,7 @@
 ﻿using Client.Services.Exceptions;
 using Client.Services.Interfaces;
 using DataApi.Shared.Models;
-using Microsoft.AspNetCore.Mvc;
+using DataApi.Shared.Responses;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -21,10 +21,8 @@ namespace Client.Services
             var response = await _client.PostAsJsonAsync("/api/user", user, cancellationToken);
             if(!response.IsSuccessStatusCode)
             {
-                //var errorResponse = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                //throw new ApiExeption(errorResponse, (HttpStatusCode)Enum.Parse(typeof(HttpStatusCode), errorResponse.Status?.ToString()));
-                throw new Exception(errorResponse);
+                var errorResponse = await response.Content.ReadFromJsonAsync<ErrorApiResponse>();
+                throw new ApiExeption(errorResponse, (HttpStatusCode)Enum.Parse(typeof(HttpStatusCode), errorResponse.Status.ToString()));
             }
         }
     }

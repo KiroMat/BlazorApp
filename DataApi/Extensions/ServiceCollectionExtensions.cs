@@ -1,9 +1,8 @@
 ﻿using DataApi.Shared.Models;
-using DataApi.Shared.Validators;
+using DataApi.Validators;
 using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace DataApi.Shared
+namespace DataApi.Extensions
 {
     public static class ServiceCollectionExtensions
     {

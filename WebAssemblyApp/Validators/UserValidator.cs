@@ -1,7 +1,7 @@
 ﻿using DataApi.Shared.Models;
 using FluentValidation;
 
-namespace DataApi.Shared.Validators
+namespace WebAssemblyApp.Validators
 {
     public class UserValidator : AbstractValidator<User> 
     {
