@@ -18,5 +18,14 @@ namespace Client.Services.Exceptions
         {
             ApiErrorRespone = apiErrorRespone;
         }
+
+        public ApiExeption(string message)
+        {
+            ApiErrorRespone = new ErrorApiResponse()
+            {
+                Title = "Api fail",
+                Detail = message
+            };
+        }
     }
 }

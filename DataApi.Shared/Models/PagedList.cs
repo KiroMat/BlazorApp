@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataApi.Shared.Models
+﻿namespace DataApi.Shared.Models
 {
     public class PagedList<T>
     {
-        public int TotalPages { get; private set; }
-        public int Page { get; private set; }
-        public int PageSize { get; private set; }
-        public int ItemsCount { get; private set; }
+        public int TotalPages { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int ItemsCount { get; set; }
         public List<T> Records { get; set; }
 
         public PagedList(IEnumerable<T> data, int page, int pageSize)

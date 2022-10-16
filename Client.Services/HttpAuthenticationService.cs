@@ -19,10 +19,11 @@ namespace Client.Services
         public async Task RegisterUserAsync(User user, CancellationToken cancellationToken)
         {
             var response = await _client.PostAsJsonAsync("/api/user", user, cancellationToken);
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = await response.Content.ReadFromJsonAsync<ErrorApiResponse>();
                 throw new ApiExeption(errorResponse, (HttpStatusCode)errorResponse.Status);
+            }
         }
     }
 }

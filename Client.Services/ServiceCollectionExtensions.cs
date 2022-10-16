@@ -7,7 +7,8 @@ namespace Client.Services
     {
         public static IServiceCollection RegisterHttpServices(this IServiceCollection services)
         {
-            services.AddScoped<IAuthenticationService, HttpAuthenticationService>();
+            services.AddScoped<IAuthenticationService, HttpAuthenticationService>()
+                .AddScoped<IPlanService, HttpPlanService>();
 
             return services;
         }
