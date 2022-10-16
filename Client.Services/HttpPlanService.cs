@@ -2,7 +2,9 @@
 using Client.Services.Interfaces;
 using DataApi.Shared.Models;
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using System.Net.Http.Json;
+using System.Text;
 
 namespace Client.Services
 {
@@ -25,9 +27,39 @@ namespace Client.Services
             };
 
             var response = await _client.GetAsync(QueryHelpers.AddQueryString("/api/Plan", @params));
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<PagedList<Plan>>();
+            }
+            else
+            {
+                throw new ApiExeption(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<Plan> EditAsync(Plan plan)
+        {
+            var myContent = JsonConvert.SerializeObject(plan);
+            var response = await _client.PutAsync("/api/plan", new StringContent(myContent, Encoding.UTF8, "application/json"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Plan>();
+            }
+            else
+            {
+                throw new ApiExeption(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<Plan> CreateAsync(Plan plan)
+        {
+            var myContent = JsonConvert.SerializeObject(plan);
+            var response = await _client.PostAsync("/api/plan", new StringContent(myContent, Encoding.UTF8, "application/json"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Plan>();
             }
             else
             {

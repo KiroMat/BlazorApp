@@ -1,12 +1,14 @@
 ﻿using Data.Db;
 using DataApi.Options;
 using DataApi.Shared.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security;
+using System.Security.Principal;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,11 +20,13 @@ namespace DataApi.Controllers
     {
         private readonly DataContext _context;
         private readonly IdentityOptions _identity;
+        private readonly IValidator<Plan> _validator;
 
-        public PlanController(DataContext context, IdentityOptions identity)
+        public PlanController(DataContext context, IdentityOptions identity, IValidator<Plan> validator)
         {
             _context = context;
             _identity = identity;
+            _validator = validator;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedList<Plan>))]
@@ -60,22 +64,62 @@ namespace DataApi.Controllers
             return "value";
         }
 
-        // POST api/<PlanController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody][FromForm] Plan plan)
         {
+            var validResult = await _validator.ValidateAsync(plan);
+
+            if (!validResult.IsValid)
+            {
+                return ValidationProblem(new ValidationProblemDetails(validResult.ToDictionary()));
+            }
+
+
+
+            plan.Id = Guid.NewGuid().ToString();
+            plan.UserId = _identity.UserId;
+            plan.CreatedDate = DateTime.Now;
+
+            await _context.Plans.AddAsync(plan);
+            await _context.SaveChangesAsync();
+
+            return Ok(plan);
         }
 
         // PUT api/<PlanController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(string id, [FromBody][FromForm] Plan plan)
         {
+            var validResult = await _validator.ValidateAsync(plan);
+
+            if (!validResult.IsValid)
+            {
+                return ValidationProblem(new ValidationProblemDetails(validResult.ToDictionary()));
+            }
+
+            var entity = await _context.Plans.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity is null)
+                return BadRequest();
+
+            entity.Title = plan.Title;
+            entity.Description = plan.Description;
+            entity.CoverPath = plan.CoverPath;
+            entity.ModifiedDate = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return Ok(entity);
         }
 
         // DELETE api/<PlanController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
+            var entity = await _context.Plans.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity is null)
+                return BadRequest();
+
+            _context.Plans.Remove(entity);
+            return NoContent();
         }
     }
 }

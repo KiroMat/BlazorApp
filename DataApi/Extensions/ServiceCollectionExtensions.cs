@@ -9,6 +9,7 @@ namespace DataApi.Extensions
         public static IServiceCollection AddValitators(this IServiceCollection services)
         {
             services.AddScoped<IValidator<User>, UserValidator>();
+            services.AddScoped<IValidator<Plan>, PlanValidator>();
             return services;
         }
     }
