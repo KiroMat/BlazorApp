@@ -1,6 +1,22 @@
 ﻿@namespace WebAssemblyApp.Components
 
 <div class="mt-4" />
-<PlanCardList FetchPlans="GetPlansAsync" />
 
+<MudText Typo="Typo.h4">My Plants</MudText>
+<span>Mode view</span>
 
+<MudToggleIconButton @bind-Toggled="@AlarmOn"
+                     Icon="@Icons.Material.Filled.GridView" Color="@Color.Primary" Title="Off"
+                     ToggledIcon="@Icons.Material.Filled.TableView" ToggledColor="@Color.Primary" ToggledTitle="On" />
+@if (AlarmOn)
+{
+    <PlanCardList FetchPlans="GetPlansAsync" />
+}
+else
+{
+    <PlansTable />
+}
+
+@code {
+    public bool AlarmOn { get; set; }
+}
