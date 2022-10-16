@@ -27,6 +27,11 @@ namespace DataApi.Controllers
         [HttpPost]
         public void Post([FromForm] FileWithDataForm dataFile)
         {
+            if(!Directory.Exists("Upload"))
+            {
+                Directory.CreateDirectory("Upload");
+            }
+
             using var fileStream = System.IO.File.Create($"Upload/{dataFile.File.FileName}");
 
             dataFile.File.CopyTo(fileStream);
