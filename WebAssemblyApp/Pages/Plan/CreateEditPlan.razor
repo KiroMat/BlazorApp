@@ -1,9 +1,10 @@
 ﻿@page "/plans/form"
+@page "/plans/form/{id}"
 
 <PAPage Title="Create/Edit a plan" BreadcrumbItems="_breadCrumbItems">
     <MudGrid>
         <MudItem lg="6" md="8" sm="12">
-            <PlanForm />
+            <PlanForm Id="@Id"/>
         </MudItem>
     </MudGrid>
 </PAPage>

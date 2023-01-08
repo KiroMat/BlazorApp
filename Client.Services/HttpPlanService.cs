@@ -40,7 +40,7 @@ namespace Client.Services
         public async Task<Plan> EditAsync(Plan plan)
         {
             var myContent = JsonConvert.SerializeObject(plan);
-            var response = await _client.PutAsync("/api/plan", new StringContent(myContent, Encoding.UTF8, "application/json"));
+            var response = await _client.PutAsync($"/api/plan/{plan.Id}", new StringContent(myContent, Encoding.UTF8, "application/json"));
 
             if (response.IsSuccessStatusCode)
             {
@@ -62,6 +62,28 @@ namespace Client.Services
                 return await response.Content.ReadFromJsonAsync<Plan>();
             }
             else
+            {
+                throw new ApiExeption(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task<Plan> GetByIdAsync(string id)
+        {
+            var response = await _client.GetAsync($"/api/plan/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<Plan>();
+            }
+            else
+            {
+                throw new ApiExeption(await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var response = await _client.DeleteAsync($"/api/plan/{id}");
+            if (!response.IsSuccessStatusCode)
             {
                 throw new ApiExeption(await response.Content.ReadAsStringAsync());
             }

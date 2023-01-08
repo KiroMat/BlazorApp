@@ -57,11 +57,16 @@ namespace DataApi.Controllers
             return Ok(new PagedList<Plan>(data, page, pageSize));
         }
 
-        // GET api/<PlanController>/5
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Plan))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
-            return "value";
+            var entity = await _context.Plans.FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null)
+                return NotFound();
+
+            return Ok(entity);
         }
 
         [HttpPost]
@@ -73,8 +78,6 @@ namespace DataApi.Controllers
             {
                 return ValidationProblem(new ValidationProblemDetails(validResult.ToDictionary()));
             }
-
-
 
             plan.Id = Guid.NewGuid().ToString();
             plan.UserId = _identity.UserId;
@@ -119,6 +122,7 @@ namespace DataApi.Controllers
                 return BadRequest();
 
             _context.Plans.Remove(entity);
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

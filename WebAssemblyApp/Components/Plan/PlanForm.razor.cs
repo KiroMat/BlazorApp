@@ -16,11 +16,22 @@ namespace WebAssemblyApp.Components
         [Inject]
         public NavigationManager Navigation { get; set; }
 
+        [Parameter]
+        public string Id { get; set; }
+
+        private bool _isEditMode => Id != null;
+
         private Plan _model = new();
         private bool _busy = false;
         private Stream _stream = null;
         private string _fileName = string.Empty;
         private string _errorMessage = string.Empty;
+
+        protected override async Task OnInitializedAsync()
+        {
+            if(_isEditMode)
+                await FetchPlanByIdAsync();
+        }
 
         private async Task SubmitFormAsync()
         {
@@ -31,9 +42,15 @@ namespace WebAssemblyApp.Components
                 if (_stream != null)
                     formFile = new FormFile(_stream, _fileName); 
 
-                var result1 = await PlanService.CreateAsync(_model);
-                var result2 = await FileOperationService.SendFileAsync(new FileWithDataForm { Description = "lol"}, formFile);
-
+                if(_isEditMode)
+                {
+                    await PlanService.EditAsync(_model);
+                }
+                else
+                {
+                    await PlanService.CreateAsync(_model);
+                    await FileOperationService.SendFileAsync(new FileWithDataForm { Description = "lol" }, formFile);
+                }
 
                 Navigation.NavigateTo("/plans");
             }
@@ -41,6 +58,24 @@ namespace WebAssemblyApp.Components
             {
                 _errorMessage = ex.Message;
             }
+            _busy = false;
+        }
+
+        private async Task FetchPlanByIdAsync()
+        {
+            _busy = true;
+
+            try
+            {
+                var result = await PlanService.GetByIdAsync(Id);
+                _model = result;
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = ex.Message;
+            }
+
+
             _busy = false;
         }
 

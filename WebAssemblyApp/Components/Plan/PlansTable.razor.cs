@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Client.Services.Interfaces;
 using DataApi.Shared.Models;
 using MudBlazor;
+using AKSoftware.Blazor.Utilities;
 
 namespace WebAssemblyApp.Components
 {
@@ -21,6 +22,15 @@ namespace WebAssemblyApp.Components
 
         private string _query = string.Empty;
         private MudTable<Plan> _table;
+
+        protected override void OnInitialized()
+        {
+            MessagingCenter.Subscribe<PlansList, Plan>(this, "plan_deleted", async (sender, args) =>
+            {
+                await _table.ReloadServerData();
+                StateHasChanged();
+            });
+        }
 
         private async Task<TableData<Plan>> ServerReloadAsync(TableState state)
         {

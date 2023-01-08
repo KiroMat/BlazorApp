@@ -2,6 +2,9 @@
 using Client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using DataApi.Shared.Models;
+using MudBlazor;
+using Microsoft.AspNetCore.Hosting.Server;
+using AKSoftware.Blazor.Utilities;
 
 namespace WebAssemblyApp.Components
 {
@@ -9,6 +12,12 @@ namespace WebAssemblyApp.Components
     {
         [Inject]
         public IPlanService PlanService { get; set; }
+
+        [Inject]
+        public NavigationManager Navigation { get; set; }
+
+        [Inject]
+        public IDialogService DialogService { get; set; }
 
         private bool _isBusy = false;
         private string _errorMessage = string.Empty;
@@ -41,6 +50,39 @@ namespace WebAssemblyApp.Components
 
             _isBusy = false;
             return new();
+        }
+
+        private void EditPlan(Plan plan)
+        {
+            Navigation.NavigateTo($"/plans/form/{plan.Id}");
+        }
+
+        private async Task DeletePlan(Plan plan)
+        {
+            var parameters = new DialogParameters();
+            parameters.Add("ContentText", $"Do you really want to delete the plan '{plan.Title}'?");
+            parameters.Add("ButtonText", "Delete");
+            parameters.Add("Color", Color.Error);
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+            var dialog = DialogService.Show<ConfirmationDialog>("Delete", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                try
+                {
+                    await PlanService.DeleteAsync(plan.Id);
+                    MessagingCenter.Send(this, "plan_deleted", plan);
+                }
+                catch (Exception ex)
+                {
+
+                    _errorMessage = ex.Message;
+                }
+                
+            }
         }
     }
 }

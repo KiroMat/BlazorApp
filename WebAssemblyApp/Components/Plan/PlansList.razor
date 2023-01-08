@@ -8,11 +8,14 @@
                      ToggledIcon="@Icons.Material.Filled.TableView" ToggledColor="@Color.Primary" ToggledTitle="On" />
 @if (AlarmOn)
 {
-    <PlanCardList FetchPlans="GetPlansAsync" />
+    <PlanCardList FetchPlans="GetPlansAsync" 
+                  OnEditClicked="EditPlan" 
+                  OnDeleteClicked="DeletePlan"/>
 }
 else
 {
-    <PlansTable />
+    <PlansTable OnEditClicked="EditPlan" 
+                OnDeleteClicked="DeletePlan"/>
 }
 
 @code {
