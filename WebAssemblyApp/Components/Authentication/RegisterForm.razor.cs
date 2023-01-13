@@ -2,6 +2,7 @@
 using Client.Services.Interfaces;
 using DataApi.Shared.Models;
 using Microsoft.AspNetCore.Components;
+using WebAssemblyApp.Shared;
 
 namespace WebAssemblyApp.Components
 {
@@ -12,6 +13,9 @@ namespace WebAssemblyApp.Components
 
         [Inject]
         public NavigationManager Navigation { get; set; }
+
+        [CascadingParameter]
+        public Error Error { get; set; }
 
         private User _model = new User();
         private bool _isBusy = false;
@@ -29,6 +33,7 @@ namespace WebAssemblyApp.Components
             }
             catch (ApiExeption ex)
             {
+                Error.HandlerError(ex);
                 _errorMessage = ex.Message;
             }
             

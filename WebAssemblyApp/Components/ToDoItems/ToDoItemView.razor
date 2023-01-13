@@ -1,0 +1,45 @@
+﻿@namespace WebAssemblyApp.Components
+
+<MudPaper Elevation="1" Class="mt-1">
+    <div class="mt-2 p-1 d-flex flex-row align-center">
+        <MudCheckBox T="bool" Checked="@_isChecked" CheckedChanged="ToogleItemAsync" Color="Color.Primary" Class="flex-grow-0 flex-shrink-0 mr-2"></MudCheckBox>
+        
+        @if(_isEdit)
+        {
+            <MudTextField @bind-Value="_description" Label="Description" Variant="Variant.Outlined" Margin="Margin.Dense" Class="flex-grow-0 flex-shrink-0 align-center"
+                          Error=@(!string.IsNullOrEmpty(_errorMessage)) ErrorText="@_errorMessage"></MudTextField>
+            <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Primary" aria-label="delete" Class="flex-grow-0 flex-shrink-0"
+                       OnClick="() => ToogleEditMode(true)" />
+
+            @if(_isBusy)
+            {
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" Class="flex-grow-0 flex-shrink-0" />
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success" aria-label="delete" Class="flex-grow-0 flex-shrink-0"
+                       OnClick="EditItemAsync" />
+            }
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Class="flex-grow-1 flex-shrink-0 align-center"
+                 Style="@_descriptionStyle" @onclick="() => ToogleEditMode(false)">
+                @Item.Description
+            </MudText>
+
+            @if(_isBusy)
+            {
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" Class="flex-grow-0 flex-shrink-0" />
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" Class="flex-grow-0 flex-shrink-0" OnClick="RemoveItemAsync" />
+            }
+            
+        }
+        
+    </div>
+</MudPaper>
+
+

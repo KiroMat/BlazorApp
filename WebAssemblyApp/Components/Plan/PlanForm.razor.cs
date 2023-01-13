@@ -2,6 +2,7 @@ using Client.Services.Interfaces;
 using DataApi.Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using WebAssemblyApp.Shared;
 
 namespace WebAssemblyApp.Components
 {
@@ -18,6 +19,9 @@ namespace WebAssemblyApp.Components
 
         [Parameter]
         public string Id { get; set; }
+
+        [CascadingParameter]
+        public Error Error { get; set; }
 
         private bool _isEditMode => Id != null;
 
@@ -38,6 +42,7 @@ namespace WebAssemblyApp.Components
             _busy = true;
             try
             {
+                throw new ArgumentException("Invalid data");
                 FormFile formFile = null;
                 if (_stream != null)
                     formFile = new FormFile(_stream, _fileName); 
@@ -56,6 +61,7 @@ namespace WebAssemblyApp.Components
             }
             catch (Exception ex)
             {
+                Error.HandlerError(ex);
                 _errorMessage = ex.Message;
             }
             _busy = false;

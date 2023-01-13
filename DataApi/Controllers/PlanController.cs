@@ -10,8 +10,6 @@ using System.Linq;
 using System.Security;
 using System.Security.Principal;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace DataApi.Controllers
 {
     [Route("api/[controller]")]
@@ -62,7 +60,9 @@ namespace DataApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var entity = await _context.Plans.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Plans
+                .Include(x => x.ToDoItems)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 return NotFound();
 

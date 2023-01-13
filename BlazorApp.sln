@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Db", "Data.Db\Data.Db.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAssemblyApp", "WebAssemblyApp\WebAssemblyApp.csproj", "{CC251CB7-BF73-4738-AFD4-B715A06972DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Services", "Client.Services\Client.Services.csproj", "{66028097-859D-470E-9D4F-48D93307EEF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.Services", "Client.Services\Client.Services.csproj", "{66028097-859D-470E-9D4F-48D93307EEF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,7 +8,7 @@
         public DateTime? EstimatedDate { get; set; }
         public DateTime? AchievedDate { get; set; }
 
-        public virtual Plan Plan { get; set; }
+        //public virtual Plan Plan { get; set; }
 
         public string PlanId { get; set; }
     }

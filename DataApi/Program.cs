@@ -2,7 +2,6 @@ using Data.Db;
 using DataApi.Extensions;
 using DataApi.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);

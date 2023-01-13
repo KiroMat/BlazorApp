@@ -1,0 +1,53 @@
+﻿@namespace WebAssemblyApp.Components
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Loading Plan Details</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            <MudItem sm="12" md="5" >
+                @if(_isBusy)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Rectangle" Height="40px" Style="min-width:200px"/>
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text" Height="40px" Style="min-width:200px" />
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text" Height="40px" Style="min-width:200px" />
+                }
+                else
+                {
+                    <MudText Typo="Typo.subtitle1">@_plan.Title</MudText>
+                    <img style="width:100%;border-radius:5px" src="@_plan.CoverPath" />
+                    <MudText Typo="Typo.body1">@_plan?.Description</MudText>
+                }
+            </MudItem>
+            <MudItem sm="12" md="7">
+                @if (_isBusy)
+                {
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text" Height="40px" Style="min-width:250px" />
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text" Height="40px" Style="min-width:250px" />
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text" Height="40px" Style="min-width:250px" />
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text" Height="40px" Style="min-width:250px" />
+                    <MudSkeleton Animation="Animation.Wave" SkeletonType="SkeletonType.Text" Height="40px" Style="min-width:250px" />
+                }
+                else
+                {
+                    <CreateToDoItemForm PlanId="@PlanId" OnToDoItemAdded="OnToDoItemCallback" />
+                    <div class="item-container">
+                        @foreach (var item in _items)
+                        {
+                            <ToDoItemView Item="item" OnToDoItemEdited="OnItemEditedCallback" OnToDoItemDeleted="OnItemDeletedCallback" />
+                        }
+                    </div>
+                    
+                }
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+

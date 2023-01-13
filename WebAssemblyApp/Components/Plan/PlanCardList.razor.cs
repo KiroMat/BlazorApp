@@ -10,6 +10,9 @@ namespace WebAssemblyApp.Components
         public Func<string, int, int, Task<PagedList<Plan>>> FetchPlans { get; set; }
 
         [Parameter]
+        public EventCallback<Plan> OnViewClicked { get; set; }
+
+        [Parameter]
         public EventCallback<Plan> OnEditClicked { get; set; }
 
         [Parameter]

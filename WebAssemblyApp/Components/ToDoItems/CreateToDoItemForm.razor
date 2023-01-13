@@ -1,0 +1,19 @@
+﻿@namespace WebAssemblyApp.Components
+
+<div class="mt-2 p-1 d-flex flex-row align-center my-2">
+    <MudTextField @bind-Value="_description" Label="New Item description" Placeholder="Going to the gym"
+                  Variant="Variant.Outlined" Margin="Margin.Dense" Class="flex-grow-1 flex-shrink-0"
+                  Error="@(!string.IsNullOrEmpty(_errorMessage))" ErrorText="@_errorMessage"></MudTextField>
+
+    @if(_isBusy)
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" Class="flex-grow-0 flex-shrink-0" />
+    }
+    else
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Success" aria-label="delete" Class="flex-grow-0 flex-shrink-0"
+                   OnClick="AddToDoItemAsync"></MudIconButton>
+    }
+
+    
+</div>
